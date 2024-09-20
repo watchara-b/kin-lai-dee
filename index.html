@@ -26,7 +26,10 @@
             font-weight: bold;
             color: #333;
         }
-        /* สไตล์สำหรับ pop-up */
+        #result img {
+            max-width: 300px;
+            margin-top: 10px;
+        }
         #quotePopup {
             display: none;
             position: fixed;
@@ -43,7 +46,6 @@
             width: 80%;
             max-width: 500px;
         }
-        /* ปุ่มปิด popup */
         #closePopup {
             margin-top: 20px;
             padding: 10px 20px;
@@ -66,34 +68,30 @@
     <button onclick="startRandom()">เริ่มสุ่มร้านอาหาร</button>
     <div id="result">กดปุ่มเพื่อเริ่มสุ่ม</div>
 
-    <!-- Div สำหรับคำกวนๆ -->
     <div id="quotePopup">
         <p id="funnyQuoteText"></p>
         <button id="closePopup" onclick="closePopup()">ปิด</button>
     </div>
 
     <script>
-        // รายชื่อร้านอาหารแบบคงที่
         const restaurants = [
-            { name: "ตั้งใจย่าง-พหลโยธิน", location: "ซอยสายลม" },
-            { name: "ร้านลาบส้มตำน้องแม็ก", location: "ซอยอารีย์ 1" },
-            { name: "ซื้อขึ้นมากิน", location: "ตามใจฉัน" },
-            { name: "ร้านข้าวมันไก่รุ่งแสง", location: "BTS อารีย์" },
-            { name: "ร้านอาหาร 3 ภาค", location: "ซอยสายลม" },
-            { name: "อองตองข้าวซอย สาขา อารีย์", location: "ซอยอารีย์ 1" },
-            { name: "ร้านข้าวมันไก่", location: "ซอยกลาง" },
-            { name: "ร้านตามสั่ง ตชด.", location: "ตชด." },
-            { name: "ร้านผัดไทย", location: "ตรงข้ามศูนย์เบ้น" },
-            { name: "ร้านก๋วยเตี๋ยวเตาถ่าน", location: "เงินติดล้อ" },
-            { name: "ร้านก๋วยข้าวแกงกระหรี่ ป้ายูมิโกะ", location: "ซอยข้าง ais 2" },
-            { name: "ร้านถาดหลุม แกงใต้ อารีย์", location: "ซอย อารีย์ 2" },
-            { name: "เสม็ดหมูกรอบ สาขาอารีย์ ซอย1", location: "ซอย อารีย์ 1" },
-            { name: "ก๋วยเตี๋ยว 1000 เส้น (Phan Zen Noodle)", location: "ซอย อารีย์ 1" },
-            { name: "ซื้อขึ้นมากิน", location: "ตามใจฉัน" },
-            { name: "ร้าน lunch laaa", location: "ซอยกลาง" }
+            { name: "ตั้งใจย่าง-พหลโยธิน", location: "ซอยสายลม", image: "https://img.wongnai.com/p/1920x0/2023/04/14/0d90cd5bc02847a09840b5525a7b286f.jpg" },
+            { name: "ร้านลาบส้มตำน้องแม็ก", location: "ซอยอารีย์ 1", image: "https://img.wongnai.com/p/1920x0/2024/03/13/fcccf98b8d304a089c071e8d833df41c.jpg" },
+            { name: "ซื้อขึ้นมากิน", location: "ตามใจฉัน", image: "https://images.uncyc.org/th/e/e1/%E0%B8%AD%E0%B8%B2%E0%B8%88%E0%B8%B2%E0%B8%A3%E0%B8%A2%E0%B9%8C%E0%B9%81%E0%B8%94%E0%B8%87.jpg" },
+            { name: "ร้านข้าวมันไก่รุ่งแสง", location: "BTS อารีย์", image: "https://img.wongnai.com/p/1920x0/2022/09/23/a4c7bb05abd5488f99f325c106e4f884.jpg" },
+            { name: "ร้านอาหาร 3 ภาค", location: "ซอยสายลม", image: "https://img.wongnai.com/p/1920x0/2019/03/22/e7c13992afe64092bd30321f661b6665.jpg" },
+            { name: "อองตองข้าวซอย สาขา อารีย์", location: "ซอยอารีย์ 1", image: "https://img.wongnai.com/p/1920x0/2021/02/01/3e80ccda8a6c4eb19fa7dc5ff327557f.jpg" },
+            { name: "ร้านข้าวมันไก่", location: "ซอยกลาง", image: "https://scontent.fbkk12-1.fna.fbcdn.net/v/t39.30808-6/457561000_122163690944249233_741520421176153530_n.jpg?stp=cp6_dst-jpg&_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=7GVP5Qg5F5MQ7kNvgHmSING&_nc_ht=scontent.fbkk12-1.fna&oh=00_AYB_1ahRu2EBxmXZyGTCRvCjN-Uu3pA_fIaXtB3Wt6bCTQ&oe=66F2CB37" },
+            { name: "ร้านตามสั่ง ตชด.", location: "ตชด.", image: "https://f.ptcdn.info/196/023/000/1410157838-Untitled-o.jpg" },
+            { name: "ร้านก๋วยเตี๋ยวเตาถ่านออนเซ็น", location: "อารีย์ Hill", image: "https://img.wongnai.com/p/1920x0/2024/04/07/0ac7c98e473544669066c0e32bbeb18a.jpg" },
+            { name: "ร้านข้าวแกงกระหรี่ คาเรยะซัง", location: "ซอยข้าง ais 2", image: "https://img.wongnai.com/p/1920x0/2018/04/19/8bec01dd84c34ea892cd3b27d2c717b5.jpg" },
+            { name: "ร้านถาดหลุม แกงใต้ อารีย์", location: "ซอย อารีย์ 2", image: "https://i.ytimg.com/vi/e9Y0qRriu7s/maxresdefault.jpg" },
+            { name: "เสม็ดหมูกรอบ สาขาอารีย์ ซอย1", location: "ซอย อารีย์ 1", image: "https://img.wongnai.com/p/1920x0/2022/08/19/7b9c88c39ea3454c81d3dc3116e7e58c.jpg" },
+            { name: "ก๋วยเตี๋ยว 1000 เส้น (Phan Zen Noodle)", location: "ซอย อารีย์ 1", image: "https://img.wongnai.com/p/1920x0/2024/05/22/9b1df23d65f94322bfc08246f7ac1dcb.jpg" },
+            { name: "ซื้อขึ้นมากิน", location: "ตามใจฉัน", image: "https://images.uncyc.org/th/e/e1/%E0%B8%AD%E0%B8%B2%E0%B8%88%E0%B8%B2%E0%B8%A3%E0%B8%A2%E0%B9%8C%E0%B9%81%E0%B8%94%E0%B8%87.jpg" },
+            { name: "ร้าน lunch laaa", location: "ซอยกลาง", image: "https://img.wongnai.com/p/1920x0/2012/10/29/af2209be33b04086b255a5022ec6e2c8.jpg" }
         ];
 
-        // คำกวนๆ แบบสุ่ม
         const funnyQuotes = [
             "มื้อนี้พูดแต่ภาษาอังกฤษ!!",
             "ผักในหม้อของเมื่อวาน ข้าวในจานของเมื่อคืน!",
@@ -110,7 +108,6 @@
             "อร่อยเกินคาด อัมพาตครึ่งตัว!"
         ];
 
-        // แสดงรายการร้านอาหารใน HTML
         const restaurantList = document.getElementById("restaurantList");
         restaurants.forEach(restaurant => {
             const listItem = document.createElement("li");
@@ -121,52 +118,44 @@
         let interval;
         let isRunning = false;
 
-        // ฟังก์ชั่นเริ่มการสุ่มแบบเคลื่อนไหว
         function startRandom() {
-            if (isRunning) return; // ถ้าสุ่มอยู่แล้ว ไม่ให้เริ่มซ้ำ
+            if (isRunning) return;
 
             isRunning = true;
             let randomIndex = 0;
 
-            // เริ่มการสุ่มทุกๆ 100 มิลลิวินาที
             interval = setInterval(() => {
                 randomIndex = Math.floor(Math.random() * restaurants.length);
                 const restaurant = restaurants[randomIndex];
                 document.getElementById("result").innerHTML = `
                     <h2>${restaurant.name}</h2>
                     <p>สถานที่: ${restaurant.location}</p>
+                    <img src="${restaurant.image}" alt="${restaurant.name}">
                 `;
             }, 100);
 
-            // หยุดการสุ่มหลังจาก 3 วินาที และแสดงคำกวนๆ
             setTimeout(() => {
                 clearInterval(interval);
                 isRunning = false;
 
-                // เลือกร้านอาหารสุดท้าย
                 const finalRestaurant = restaurants[randomIndex];
-
-                // เลือกคำกวนๆ แบบสุ่ม
                 const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
 
-                // แสดงผลลัพธ์
                 document.getElementById("result").innerHTML = `
                     <h2>${finalRestaurant.name}</h2>
                     <p>สถานที่: ${finalRestaurant.location}</p>
+                    <img src="${finalRestaurant.image}" alt="${finalRestaurant.name}">
                 `;
 
-                // แสดงคำกวนๆ กลางจอ
                 showPopup(randomQuote);
             }, 3000);
         }
 
-        // ฟังก์ชั่นแสดง pop-up
         function showPopup(quote) {
             document.getElementById("funnyQuoteText").textContent = quote;
             document.getElementById("quotePopup").style.display = 'block';
         }
 
-        // ฟังก์ชั่นปิด pop-up
         function closePopup() {
             document.getElementById("quotePopup").style.display = 'none';
         }
