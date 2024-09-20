@@ -178,8 +178,12 @@
                     <p>สถานที่: ${finalRestaurant.location}</p>
                     <img src="${finalRestaurant.image}" alt="${finalRestaurant.name}">
                 `;
-
+                        // เช็คว่าได้ "ซื้อขึ้นมากิน" หรือไม่
+            if (finalRestaurant.name === "ซื้อขึ้นมากิน") {
+                showPopup("แล้วแต่ลื้อ!!");
+            } else {
                 showPopup(randomQuote);
+            }    
             }, 3000);
         }
 
