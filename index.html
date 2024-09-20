@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>สุ่มเลือกร้านอาหารแบบเคลื่อนไหว</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+        }
+        .restaurant-list {
+            margin: 20px 0;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+        }
+        /* สไตล์สำหรับ pop-up */
+        #quotePopup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 28px;
+            text-align: center;
+            z-index: 1000;
+            width: 80%;
+            max-width: 500px;
+        }
+        /* ปุ่มปิด popup */
+        #closePopup {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #f1c40f;
+            border: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h1>อิฐพร้อมก่อสุดหล่อพร้อมยัง</h1>
+
+    <div class="restaurant-list">
+        <h3>รายชื่อร้านอาหาร:</h3>
+        <ul id="restaurantList"></ul>
+    </div>
+
+    <button onclick="startRandom()">เริ่มสุ่มร้านอาหาร</button>
+    <div id="result">กดปุ่มเพื่อเริ่มสุ่ม</div>
+
+    <!-- Div สำหรับคำกวนๆ -->
+    <div id="quotePopup">
+        <p id="funnyQuoteText"></p>
+        <button id="closePopup" onclick="closePopup()">ปิด</button>
+    </div>
+
+    <script>
+        // รายชื่อร้านอาหารแบบคงที่
+        const restaurants = [
+            { name: "ตั้งใจย่าง-พหลโยธิน", location: "ซอยสายลม" },
+            { name: "ร้านลาบส้มตำน้องแม็ก", location: "ซอยอารีย์ 1" },
+            { name: "ซื้อขึ้นมากิน", location: "ตามใจฉัน" },
+            { name: "ร้านข้าวมันไก่รุ่งแสง", location: "BTS อารีย์" },
+            { name: "ร้านอาหาร 3 ภาค", location: "ซอยสายลม" },
+            { name: "อองตองข้าวซอย สาขา อารีย์", location: "ซอยอารีย์ 1" },
+            { name: "ร้านข้าวมันไก่", location: "ซอยกลาง" },
+            { name: "ร้านตามสั่ง ตชด.", location: "ตชด." },
+            { name: "ร้านผัดไทย", location: "ตรงข้ามศูนย์เบ้น" },
+            { name: "ร้านก๋วยเตี๋ยวเตาถ่าน", location: "เงินติดล้อ" },
+            { name: "ร้านก๋วยข้าวแกงกระหรี่ ป้ายูมิโกะ", location: "ซอยข้าง ais 2" },
+            { name: "ร้านถาดหลุม แกงใต้ อารีย์", location: "ซอย อารีย์ 2" },
+            { name: "เสม็ดหมูกรอบ สาขาอารีย์ ซอย1", location: "ซอย อารีย์ 1" },
+            { name: "ก๋วยเตี๋ยว 1000 เส้น (Phan Zen Noodle)", location: "ซอย อารีย์ 1" },
+            { name: "ซื้อขึ้นมากิน", location: "ตามใจฉัน" },
+            { name: "ร้าน lunch laaa", location: "ซอยกลาง" }
+        ];
+
+        // คำกวนๆ แบบสุ่ม
+        const funnyQuotes = [
+            "มื้อนี้พูดแต่ภาษาอังกฤษ!!",
+            "ผักในหม้อของเมื่อวาน ข้าวในจานของเมื่อคืน!",
+            "อร่อยเข้ม เค็มยันลำไส้!",
+            "สดใหม่ใหม่วันต่อวัน..วันละจานสองจาน!",
+            "อร่อยเกินร้อย ให้น้อยเป็นเอกลักษณ์!",
+            "คำแรกขึ้นสมอง คำสองขึ้นสวรรค์?",
+            "คำแรกประทับใจ คำต่อไปประทับส้วม!",
+            "ยืนหนึ่งเรื่องความกรอบ เคี้ยวจนหอบก็ยังไม่แตก!",
+            "รสชาติไม่ต้องพูดถึง รถปอเต็กตึ๊งมารอแล้ว!",
+            "หน้าตาคนทำไม่ค่อยดี รสชาติที่มีก็เช่นกัน!",
+            "บอกสูตรชาววัง...วังหลังไม่กินแล้วว!",
+            "ซื้อเป็นร้อย ก็ยังน้อยอยู่ดี!",
+            "อร่อยเกินคาด อัมพาตครึ่งตัว!"
+        ];
+
+        // แสดงรายการร้านอาหารใน HTML
+        const restaurantList = document.getElementById("restaurantList");
+        restaurants.forEach(restaurant => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${restaurant.name} - ${restaurant.location}`;
+            restaurantList.appendChild(listItem);
+        });
+
+        let interval;
+        let isRunning = false;
+
+        // ฟังก์ชั่นเริ่มการสุ่มแบบเคลื่อนไหว
+        function startRandom() {
+            if (isRunning) return; // ถ้าสุ่มอยู่แล้ว ไม่ให้เริ่มซ้ำ
+
+            isRunning = true;
+            let randomIndex = 0;
+
+            // เริ่มการสุ่มทุกๆ 100 มิลลิวินาที
+            interval = setInterval(() => {
+                randomIndex = Math.floor(Math.random() * restaurants.length);
+                const restaurant = restaurants[randomIndex];
+                document.getElementById("result").innerHTML = `
+                    <h2>${restaurant.name}</h2>
+                    <p>สถานที่: ${restaurant.location}</p>
+                `;
+            }, 100);
+
+            // หยุดการสุ่มหลังจาก 3 วินาที และแสดงคำกวนๆ
+            setTimeout(() => {
+                clearInterval(interval);
+                isRunning = false;
+
+                // เลือกร้านอาหารสุดท้าย
+                const finalRestaurant = restaurants[randomIndex];
+
+                // เลือกคำกวนๆ แบบสุ่ม
+                const randomQuote = funnyQuotes[Math.floor(Math.random() * funnyQuotes.length)];
+
+                // แสดงผลลัพธ์
+                document.getElementById("result").innerHTML = `
+                    <h2>${finalRestaurant.name}</h2>
+                    <p>สถานที่: ${finalRestaurant.location}</p>
+                `;
+
+                // แสดงคำกวนๆ กลางจอ
+                showPopup(randomQuote);
+            }, 3000);
+        }
+
+        // ฟังก์ชั่นแสดง pop-up
+        function showPopup(quote) {
+            document.getElementById("funnyQuoteText").textContent = quote;
+            document.getElementById("quotePopup").style.display = 'block';
+        }
+
+        // ฟังก์ชั่นปิด pop-up
+        function closePopup() {
+            document.getElementById("quotePopup").style.display = 'none';
+        }
+    </script>
+</body>
+</html>
