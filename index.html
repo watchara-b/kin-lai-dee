@@ -9,7 +9,23 @@
             font-family: Arial, sans-serif;
             text-align: center;
             margin-top: 50px;
-            position: relative;
+            /* position: relative; */
+            background-color: #f0fff0; /* สีพื้นหลังฟ้าอ่อน */
+        }
+        h1 {
+            font-size: 48px;
+            background-image: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: rainbow 3s infinite, blink 1s step-start infinite;
+        }
+        @keyframes rainbow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 100% 50%; }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         .restaurant-list {
             margin: 20px 0;
