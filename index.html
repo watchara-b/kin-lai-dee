@@ -8,8 +8,13 @@
         body {
             font-family: Arial, sans-serif;
             text-align: center;
-            margin-top: 50px;
             background-color: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
         }
         h1 {
             font-size: 48px;
@@ -26,24 +31,37 @@
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
-        .restaurant-list {
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
             margin: 20px 0;
+        }
+        #result img {
+            max-width: 300px;
+            margin-top: 10px;
+        }
+        .restaurant-list {
+            display: none;
+            margin-top: 40px;
+            color: white;
         }
         button {
             margin-top: 20px;
             padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            background-color: #f1c40f; /* สีพื้นหลังปุ่ม */
+            border: none;
+            border-radius: 5px;
+            color: white;
+            text-shadow: 0 0 5px white; /* เรืองแสงข้อความ */
+            box-shadow: 0 0 10px white, 0 0 20px white; /* เรืองแสงรอบๆ */
+            transition: box-shadow 0.3s ease-in-out; /* เอฟเฟกต์การเปลี่ยน */
         }
-        #result {
-            margin-top: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #333;
-        }
-        #result img {
-            max-width: 300px;
-            margin-top: 10px;
+
+        button:hover {
+            box-shadow: 0 0 20px white, 0 0 30px white; /* เพิ่มความเรืองแสงเมื่อเลื่อนเมาส์ */
         }
         #quotePopup {
             display: none;
@@ -52,7 +70,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             background-color: rgba(0, 0, 0, 0.8);
-            color: white;
+            color: red;
             padding: 20px;
             border-radius: 10px;
             font-size: 28px;
@@ -75,13 +93,14 @@
 <body>
     <h1>อิฐพร้อมก่อสุดหล่อพร้อมยัง</h1>
 
+    <div id="result">กดปุ่มเพื่อเริ่มสุ่ม</div>
+    
+    <button onclick="startRandom()">เริ่มสุ่มร้านอาหาร</button>
+
     <div class="restaurant-list">
         <h3>รายชื่อร้านอาหาร:</h3>
         <ul id="restaurantList"></ul>
     </div>
-
-    <button onclick="startRandom()">เริ่มสุ่มร้านอาหาร</button>
-    <div id="result">กดปุ่มเพื่อเริ่มสุ่ม</div>
 
     <div id="quotePopup">
         <p id="funnyQuoteText"></p>
